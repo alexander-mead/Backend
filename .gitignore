@@ -1,6 +1,8 @@
+# Poetry
 poetry.lock
 
 # Enviornments
 .env
 
+# Python
 __pycache__/
