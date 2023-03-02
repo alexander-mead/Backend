@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>Mandelbrot set</h1>
+<label for="realInput">Real part:</label>
+<input id="realInput" type="number" value="-1.373543"/><br><br>
+<label for="imagInput">Imaginary part:</label>
+<input id="imagInput" type="number" value="-0.01234831"/><br><br>
+<button id="clickButton" onClick="sample()">Sample from Mandelbrot set</button>
+<span id="result"> </span> 
+
+
+{% endblock %}
