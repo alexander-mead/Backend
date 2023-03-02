@@ -2,3 +2,5 @@ poetry.lock
 
 # Enviornments
 .env
+
+__pycache__/
