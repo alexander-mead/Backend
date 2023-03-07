@@ -1,9 +1,11 @@
+# Standard imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+# Project imports
 from . import mandelbrot
 from . import settings
 
@@ -39,6 +41,7 @@ class SampleInput(BaseModel):
     real: float
     imag: float
     max_iters: int = 50
+
 
 # Mandelbrot
 @app.post("/sample")
