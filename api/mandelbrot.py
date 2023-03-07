@@ -15,28 +15,15 @@ def sample(c, max_iters):
     return n if n != max_iters else 0
 
 
-# def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
-#     """
-#     Loops over an area and assigns points to the Mandelbrot set
-#     """
-#     x = np.linspace(real_start, real_end, width)
-#     y = np.linspace(imag_start, image_end, height)
-#     mandelbrot_set = np.empty((height, width))
-#     for i in range(height): # TODO: Improve slow loops
-#         for j in range(width):
-#             mandelbrot_set[i, j] = sample(x[j] + y[i] * 1j, max_iters)
-#     return mandelbrot_set
-
-
 def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
     """
     Loops over an area and assigns points to the Mandelbrot set
-    Thanks chatGPT for this vectorized version
+    Thanks chatGPT for this vectorized version (although it was wrong to begin with)
     """
     x, y = np.meshgrid(np.linspace(real_start, real_end, width),
                        np.linspace(imag_start, image_end, height))
-    c = x + y * 1j # Map x, y to their complex values
-    mandelbrot_set = np.zeros((height, width)) # Initialise the set
+    mandelbrot_set = np.zeros((height, width))
+    c = x + y * 1j       # Map x, y to their complex values
     z = np.zeros_like(c) # Initialise the value of 'z' at each location
     for i in range(max_iters):
         z = z**2 + c              # Iterate
@@ -47,17 +34,17 @@ def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, h
 
 
 def create_image(real_start, real_end, imag_start, image_end, max_iters, width, height,
-                 cmap="cubehelix", figsize=(8,8)):
+                 cmap="cubehelix", figsize=(8,8), dpi=150):
     """
     Create a png and return it as a binary
     """
     array = sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height)
-    plt.subplots(figsize=figsize)
+    plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
     plt.imshow(array, cmap=cmap)
     plt.xticks([]); plt.yticks([])
     plt.tight_layout()
     buffer = io.BytesIO()
-    plt.savefig(buffer, format="png") # Place the png as a binary in memory
+    plt.savefig(buffer, format="png", bbox_inches='tight', pad_inches=0) # Place the png as a binary in memory
     return buffer.getvalue() # Return the png binary (avoids saving to disk)
 
 
@@ -66,16 +53,12 @@ if __name__ == "__main__":
     # Parameters for part of set
     rmin, rmax = -1.5, 0.5
     imin, imax = -1., 1.
-    max_iters = 100
-    width, height = 1000, 1000
+    max_iters = 50
+    width, height = 2000, 2000
     file_name = "mandelbrot.png"
 
     # Display an image on screen and simulatanouesly save it
-    image = sample_area(rmin, rmax, imin, imax, max_iters, width, height)
-    plt.subplots(figsize=(8, 8))
-    plt.imshow(image, cmap="cubehelix")
-    plt.xticks([]); plt.yticks([])
-    plt.tight_layout()
-    plt.savefig("static/"+file_name)
+    create_image(rmin, rmax, imin, imax, max_iters, width, height)
+    plt.savefig("static/"+file_name, bbox_inches='tight', pad_inches=0)
     plt.show()
     plt.close()

@@ -1,10 +1,9 @@
 # Standard imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, Response#, StreamingResponse
+from fastapi.responses import HTMLResponse, Response#, StreamingResponse # TODO: Remove
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from datetime import datetime
 
 # Project imports
 from . import mandelbrot
@@ -16,6 +15,8 @@ app = FastAPI()
 # Allows website to see static directory (containing resources)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Middleware
+# TODO: What does this do exactly?
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -63,8 +64,8 @@ class ImageInput(BaseModel):
     imag: float
     size: float
     max_iters: int = 50
-    width: int = 1000
-    height: int = 1000
+    width: int = 2000
+    height: int = 2000
 
 
 # Mandelbrot image
@@ -76,12 +77,8 @@ async def image(input: ImageInput):
     width, height = input.width, input.height
     print("Creating image")
     binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
-    #headers = {"Content-Disposition": 'inline; filename="test.png"'}     # Necessary to tell that a png is being sent
-    headers = {
-        "Content-Disposition": f'attachment; filename="mandelbrot-{datetime.now().strftime("%Y%m%d%H%M%S")}.png"',
-        "Cache-Control": "max-age=3600, public"  # Cache the image for 1 hour TODO: Where does this get cached?
-    }
-    return Response(binary_png, headers=headers, media_type="image/png") # Necessary to tell that a png is being sent
-    #return StreamingResponse(binary_png, media_type="image/png")
+    headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'} # Necessary to tell that a png is being sent
+    return Response(binary_png, headers=headers, media_type="image/png")   # Necessary to tell that a png is being sent
+    #return StreamingResponse(binary_png, media_type="image/png") # TODO: Is StreamingResponse better?
 
 ### ###

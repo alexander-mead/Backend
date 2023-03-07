@@ -1,5 +1,7 @@
 {% extends "base.html" %} {% block content %}
 
+<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"> <!--TODO: Does this work?-->
+
 <h1>Sample a point from the Mandelbrot Set</h1>
 
 <label for="realInput">Real part: </label>
@@ -11,7 +13,7 @@
 <button id="sampleButton" onClick="sample()">Sample point</button><br><br>
 <label for="result">Result: </label><span id="result"></span><br><br>
 
-<h1>Sample a region from the Mandelbrot Set</h1>
+<h1>Visualise a region from the Mandelbrot Set</h1>
 
 <label for="xInput">Image centre (real): </label>
 <input id="xInput" type="number" value="-0.5"/><br><br>
@@ -23,6 +25,6 @@
 <input id="sizeInput" type="number" value="2."/><br><br>
 
 <button id="imageButton" onClick="image()">Create image</button><br><br>
-<img id="image" src="static/mandelbrot.png" alt="Mandelbrot Set"><br><br>
+<img id="image" src="static/mandelbrot.png" alt="Mandelbrot Set" style="width:1000px;height:1000px;"><br><br>
 
 {% endblock %}

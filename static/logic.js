@@ -33,8 +33,10 @@ function sample() {
     // Fetch
     fetch(url, params)
         .then((response) => response.json())
-        //.then((data) => console.log(data))
-        .then((data) => document.getElementById("result").innerText = data)
+        .then((data) => {
+            console.log("Number of iterations:", data);
+            document.getElementById("result").innerText = data;
+        })
         .catch((error) => {
             console.log("Failed to sample point");
         });
@@ -66,8 +68,8 @@ function image() {
         .then((blob) => {
             console.log("Response blob received");
             const objectURL = URL.createObjectURL(blob);
-            document.getElementById("image").src = objectURL;
-            //document.body.style.backgroundImage = `url(${objectURL})`;
+            document.getElementById("image").src = objectURL; // To set image within html
+            //document.body.style.backgroundImage = `url(${objectURL})`; // To set background image
         })
         .catch((error) => {
             console.log("Failed to sample image");
