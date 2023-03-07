@@ -1,7 +1,7 @@
 # Standard imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -33,7 +33,7 @@ async def index(request: Request):
 
 
 # Hello user (example path-parameter route)
-@app.get("/{name}")
+@app.get("/hello/{name}")
 async def hello(name: str):
     return f"Hello {name}"
 
@@ -50,17 +50,20 @@ class SampleInput(BaseModel):
 #async def sample(real_number: float, imaginary_number: float): # Inputs are floats here
 async def sample(input: SampleInput): # Input is a class here
     c = input.real + input.imag * 1.j
-    #print("Complex number:", c)
+    print("Sampling complex number:", c)
     return mandelbrot.sample(c, input.max_iters)
 
 
 # Mandelbrot image
 @app.post("/image")
-async def sample(): # TODO: Allow for user to choose parameters
+async def image(): # TODO: Allow for the user to choose parameters
     rmin, rmax = -1., 1.
     imin, imax = -1., 1.
     max_iters = 50
     width, height = 10, 10
-    return mandelbrot.sample_area(rmin, rmax, imin, imax, max_iters, width, height)
+    print("Creating image")
+    binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
+    headers = {"Content-Disposition": 'inline; filename="test.png"'}     # Necessary to tell that a png is being sent
+    return Response(binary_png, headers=headers, media_type="image/png") # Necessary to tell that a png is being sent
 
 ### ###
