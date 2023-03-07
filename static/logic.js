@@ -44,6 +44,9 @@ function sample() {
 function image() {
 
     // Definitions
+    const xInput = document.getElementById("xInput").value;
+    const yInput = document.getElementById("yInput").value;
+    const sizeInput = document.getElementById("sizeInput").value;
     const url = "http://localhost:8000/image"; // TODO: Port 8000 hardcoded here
     const params = {
         method: "POST", // Unless this is present it will default to "GET"
@@ -56,10 +59,10 @@ function image() {
     fetch(url, params)
         .then((response) => response.blob())
         .then((blob) => {
-            console.log("Response received");
+            console.log("Response blob received");
             const objectURL = URL.createObjectURL(blob);
-            //document.getElementById("image").src = "url(${objectURL})";
-            document.body.style.backgroundImage = `url(${objectURL})`;
+            document.getElementById("image").src = objectURL;
+            //document.body.style.backgroundImage = `url(${objectURL})`;
         })
         .catch((error) => {
             console.log("Failed to sample image");

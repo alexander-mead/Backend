@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block content %}
 
 <h1>Sample a point from the Mandelbrot Set</h1>
+
 <label for="realInput">Real part: </label>
 <input id="realInput" type="number" value="-1.373543"/><br><br>
 
@@ -9,6 +10,17 @@
 
 <button id="sampleButton" onClick="sample()">Sample point</button><br><br>
 <label for="result">Result: </label><span id="result"></span><br><br>
+
+<h1>Sample a region from the Mandelbrot Set</h1>
+
+<label for="xInput">Image centre (real): </label>
+<input id="xInput" type="number" value="0."/><br><br>
+
+<label for="yInput">Image centre (imaginary): </label>
+<input id="yInput" type="number" value="0."/><br><br>
+
+<label for="sizeInput">Image size (assumed square): </label>
+<input id="sizeInput" type="number" value="2."/><br><br>
 
 <button id="imageButton" onClick="image()">Create image</button><br><br>
 <img id="image" src="static/mandelbrot.png" alt="Mandelbrot Set"><br><br>

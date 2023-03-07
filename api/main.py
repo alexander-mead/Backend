@@ -1,7 +1,7 @@
 # Standard imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, Response#, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -60,10 +60,11 @@ async def image(): # TODO: Allow for the user to choose parameters
     rmin, rmax = -1., 1.
     imin, imax = -1., 1.
     max_iters = 50
-    width, height = 10, 10
+    width, height = 100, 100 # TODO: Improve resolution
     print("Creating image")
     binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
     headers = {"Content-Disposition": 'inline; filename="test.png"'}     # Necessary to tell that a png is being sent
     return Response(binary_png, headers=headers, media_type="image/png") # Necessary to tell that a png is being sent
+    #return StreamingResponse(binary_png, media_type="image/png")
 
 ### ###
