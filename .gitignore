@@ -4,9 +4,11 @@ poetry.lock
 # Enviornments
 .env
 
+# Mac
+.DS_Store
+
 # Python
 __pycache__/
 
 # Crap
 images/
-static/mandelbrot.png

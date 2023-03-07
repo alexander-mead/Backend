@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, Response#, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from datetime import datetime
 
 # Project imports
 from . import mandelbrot
@@ -39,6 +40,7 @@ async def hello(name: str):
 
 
 # Class for input to Mandelbrot sample
+# TODO: Is this the right place to set default values?
 class SampleInput(BaseModel):
     real: float
     imag: float
@@ -54,16 +56,31 @@ async def sample(input: SampleInput): # Input is a class here
     return mandelbrot.sample(c, input.max_iters)
 
 
+# Class for input to Mandelbrot sample
+# TODO: Is this the right place to set default values?
+class ImageInput(BaseModel):
+    real: float
+    imag: float
+    size: float
+    max_iters: int = 50
+    width: int = 1000
+    height: int = 1000
+
+
 # Mandelbrot image
 @app.post("/image")
-async def image(): # TODO: Allow for the user to choose parameters
-    rmin, rmax = -1., 1.
-    imin, imax = -1., 1.
-    max_iters = 50
-    width, height = 100, 100 # TODO: Improve resolution
+async def image(input: ImageInput):
+    rmin, rmax = input.real-input.size/2., input.real+input.size/2.
+    imin, imax = input.imag-input.size/2., input.imag+input.size/2.
+    max_iters = input.max_iters
+    width, height = input.width, input.height
     print("Creating image")
     binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
-    headers = {"Content-Disposition": 'inline; filename="test.png"'}     # Necessary to tell that a png is being sent
+    #headers = {"Content-Disposition": 'inline; filename="test.png"'}     # Necessary to tell that a png is being sent
+    headers = {
+        "Content-Disposition": f'attachment; filename="mandelbrot-{datetime.now().strftime("%Y%m%d%H%M%S")}.png"',
+        "Cache-Control": "max-age=3600, public"  # Cache the image for 1 hour TODO: Where does this get cached?
+    }
     return Response(binary_png, headers=headers, media_type="image/png") # Necessary to tell that a png is being sent
     #return StreamingResponse(binary_png, media_type="image/png")
 
