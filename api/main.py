@@ -31,25 +31,36 @@ app.add_middleware(
 async def index(request: Request):
     return settings.TEMPLATES.TemplateResponse("index.html", {"request": request})
 
-# Hello user (path-parameter route)
+
+# Hello user (example path-parameter route)
 @app.get("/{name}")
 async def hello(name: str):
     return f"Hello {name}"
 
 
+# Class for input to Mandelbrot sample
 class SampleInput(BaseModel):
     real: float
     imag: float
     max_iters: int = 50
 
 
-# Mandelbrot
+# Mandelbrot sample
 @app.post("/sample")
-#async def sample(real_number: float, imaginary_number: float):
-async def sample(input: SampleInput):
-    #c = real_number + imaginary_number * 1.j
+#async def sample(real_number: float, imaginary_number: float): # Inputs are floats here
+async def sample(input: SampleInput): # Input is a class here
     c = input.real + input.imag * 1.j
-    print("Complex number:", c)
+    #print("Complex number:", c)
     return mandelbrot.sample(c, input.max_iters)
+
+
+# Mandelbrot image
+@app.post("/image")
+async def sample(): # TODO: Allow for user to choose parameters
+    rmin, rmax = -1., 1.
+    imin, imax = -1., 1.
+    max_iters = 50
+    width, height = 10, 10
+    return mandelbrot.sample_area(rmin, rmax, imin, imax, max_iters, width, height)
 
 ### ###

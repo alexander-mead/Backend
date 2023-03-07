@@ -6,3 +6,7 @@ poetry.lock
 
 # Python
 __pycache__/
+
+# Crap
+images/
+static/mandelbrot.png

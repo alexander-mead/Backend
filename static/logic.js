@@ -3,11 +3,13 @@ function showText() {
     document.getElementById("clickButton").style.display = "none";
 }
 
+
 function sayHello() {
     const name = document.getElementById("nameInput").value;
     alert("Hello, " + name + "!");
     console.log("Hey ho!");
 }
+
 
 function sample() {
     const realInput = document.getElementById("realInput").value;
@@ -15,7 +17,7 @@ function sample() {
     // const maxIters = document.getElementById("maxIters").value;
     const maxIters = 50;
 
-    const url = "http://localhost:8000/sample"
+    const url = "http://localhost:8000/sample" // TODO: Port 8000 hardcoded here
     const params = {
         method: "POST",
         headers: {
@@ -31,6 +33,35 @@ function sample() {
         .then((response) => response.json())
         //.then((data) => console.log(data))
         .then((data) => document.getElementById("result").innerText = data)
+        .catch((error) => {
+            console.log("Failed to sample point");
+        })
+    ;
+}
+
+
+function image() {
+    // const realInput = document.getElementById("realInput").value;
+    // const imagInput = document.getElementById("imagInput").value;
+    // const maxIters = document.getElementById("maxIters").value;
+    // const maxIters = 50;
+
+    const url = "http://localhost:8000/image" // TODO: Port 8000 hardcoded here
+    // const params = {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //         real: realInput,
+    //         imag: imagInput,
+    //         max_iters: maxIters,
+    //     })
+    // };
+    fetch(url)
+        .then((response) => response.json())
+        //.then((data) => console.log(data))
+        .then((data) => document.getElementById("image").innerText = data)
         .catch((error) => {
             console.log("There has been a catastrophe!");
         })
