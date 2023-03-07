@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "backend"
+name = "dynamic"
 version = "0.1.0"
 description = "Backend example with fastapi"
 authors = ["Alexander Mead <alexander@digilab.co.uk>"]
