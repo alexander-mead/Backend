@@ -1,7 +1,7 @@
 # Standard imports
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, Response#, StreamingResponse # TODO: Remove
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -15,8 +15,7 @@ app = FastAPI()
 # Allows website to see static directory (containing resources)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Middleware
-# TODO: What does this do exactly?
+# Middleware (authentication)
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -41,7 +40,7 @@ async def hello(name: str):
 
 
 # Class for input to Mandelbrot sample
-# TODO: Is this the right place to set default values?
+# This is the right place to set default values
 class SampleInput(BaseModel):
     real: float
     imag: float
@@ -58,7 +57,7 @@ async def sample(input: SampleInput): # Input is a class here
 
 
 # Class for input to Mandelbrot sample
-# TODO: Is this the right place to set default values?
+# This is the right place to set default values
 class ImageInput(BaseModel):
     real: float
     imag: float
@@ -79,6 +78,5 @@ async def image(input: ImageInput):
     binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
     headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'} # Necessary to tell that a png is being sent
     return Response(binary_png, headers=headers, media_type="image/png")   # Necessary to tell that a png is being sent
-    #return StreamingResponse(binary_png, media_type="image/png") # TODO: Is StreamingResponse better?
 
 ### ###

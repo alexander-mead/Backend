@@ -3,26 +3,31 @@
 <h1>Sample a point from the Mandelbrot Set</h1>
 
 <label for="realInput">Real part: </label>
-<input id="realInput" type="number" value="0."/><br><br>
+<input id="realInput" type="number" value="0." /><br /><br />
 
 <label for="imagInput">Imaginary part: </label>
-<input id="imagInput" type="number" value="0."/><br><br>
+<input id="imagInput" type="number" value="0." /><br /><br />
 
-<button id="sampleButton" onClick="sample()">Sample point</button><br><br>
-<label for="result">Result: </label><span id="result"></span><br><br>
+<button id="sampleButton" onClick="sample()">Sample point</button><br /><br />
+<label for="result">Result: </label><span id="result"></span><br /><br />
 
 <h1>Visualise a region from the Mandelbrot Set</h1>
 
 <label for="xInput">Image centre (real): </label>
-<input id="xInput" type="number" value="-0.5"/><br><br>
+<input id="xInput" type="number" value="-0.5" /><br /><br />
 
 <label for="yInput">Image centre (imaginary): </label>
-<input id="yInput" type="number" value="0."/><br><br>
+<input id="yInput" type="number" value="0." /><br /><br />
 
 <label for="sizeInput">Image size (assumed square): </label>
-<input id="sizeInput" type="number" value="2."/><br><br>
+<input id="sizeInput" type="number" value="2." /><br /><br />
 
-<button id="imageButton" onClick="image()">Create image</button><br><br>
-<img id="image" src="static/mandelbrot.png" alt="Mandelbrot Set" style="width:1000px;height:1000px;"><br><br>
+<button id="imageButton" onClick="image()">Create image</button><br /><br />
+<img
+  id="image"
+  src="static/mandelbrot.png"
+  alt="Mandelbrot Set"
+  style="width: 1000px; height: 1000px"
+/><br /><br />
 
 {% endblock %}

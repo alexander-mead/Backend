@@ -17,7 +17,7 @@ function sample() {
     const realInput = document.getElementById("realInput").value;
     const imagInput = document.getElementById("imagInput").value;
     const maxIters = 50; // TODO: This is hard coded and could be user set?
-    const url = "http://localhost:8000/sample" // TODO: Port 8000 hardcoded here
+    const url = "http://localhost:8000/sample" // TODO: Set port to global variable
     const params = {
         method: "POST",
         headers: {
@@ -38,6 +38,7 @@ function sample() {
             document.getElementById("result").innerText = data;
         })
         .catch((error) => {
+            console.log('Error:', error)
             console.log("Failed to sample point");
         });
 }
@@ -49,7 +50,7 @@ function image() {
     const xInput = document.getElementById("xInput").value;
     const yInput = document.getElementById("yInput").value;
     const sizeInput = document.getElementById("sizeInput").value;
-    const url = "http://localhost:8000/image"; // TODO: Port 8000 hardcoded here
+    const url = "http://localhost:8000/image"; // TODO: Set port to global variable
     const params = {
         method: "POST", // Unless this is present it will default to "GET"
         headers: {
@@ -72,6 +73,7 @@ function image() {
             //document.body.style.backgroundImage = `url(${objectURL})`; // To set background image
         })
         .catch((error) => {
+            console.log('Error:', error)
             console.log("Failed to sample image");
         });
 }
