@@ -33,36 +33,13 @@ async def index(request: Request):
     return settings.TEMPLATES.TemplateResponse("index.html", {"request": request})
 
 
-# Hello user (example path-parameter route)
-@app.get("/hello/{name}")
-async def hello(name: str):
-    return f"Hello {name}"
-
-
 # Class for input to Mandelbrot sample
-# This is the right place to set default values
-class SampleInput(BaseModel):
-    real: float
-    imag: float
-    max_iters: int = 50
-
-
-# Mandelbrot sample
-@app.post("/sample")
-#async def sample(real_number: float, imaginary_number: float): # Inputs are floats here
-async def sample(input: SampleInput): # Input is a class here
-    c = input.real + input.imag * 1.j
-    print("Sampling complex number:", c)
-    return mandelbrot.sample(c, input.max_iters)
-
-
-# Class for input to Mandelbrot sample
-# This is the right place to set default values
+# This is the correct place to set default values
 class ImageInput(BaseModel):
     real: float
     imag: float
     size: float
-    max_iters: int = 50
+    depth: str
     width: int = 2000
     height: int = 2000
 
@@ -72,11 +49,19 @@ class ImageInput(BaseModel):
 async def image(input: ImageInput):
     rmin, rmax = input.real-input.size/2., input.real+input.size/2.
     imin, imax = input.imag-input.size/2., input.imag+input.size/2.
-    max_iters = input.max_iters
+    if input.depth == "low":
+        max_iters = 64
+    elif input.depth == "medium":
+        max_iters = 128
+    elif input.depth == "high":
+        max_iters = 256
+    else:
+        raise ValueError("Invalid image depth")
     width, height = input.width, input.height
     print("Creating image")
     binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
     headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'} # Necessary to tell that a png is being sent
+    print("Sending image")
     return Response(binary_png, headers=headers, media_type="image/png")   # Necessary to tell that a png is being sent
 
 ### ###

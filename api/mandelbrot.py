@@ -3,20 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def sample(c, max_iters):
-    """
-    Figures out if a given complex number 'c' is part of the set or not
-    Either returns the number of iterations required for divergence
-    or zero if the point does not diverge
-    """
-    z = 0.
-    n = 0
-    while abs(z) <= 2. and n < max_iters:
-        z = z**2+c
-        n += 1
-    return n if n != max_iters else 0
-
-
 def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
     """
     Loops over an area and assigns points to the Mandelbrot set
@@ -58,7 +44,7 @@ if __name__ == "__main__":
     # Parameters for part of set
     rmin, rmax = -1.5, 0.5
     imin, imax = -1., 1.
-    max_iters = 50
+    max_iters = 128 # Medium depth
     width, height = 2000, 2000
     file_name = "mandelbrot.png"
 

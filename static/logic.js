@@ -1,48 +1,5 @@
-function showText() {
-    document.getElementById("hiddenText").style.display = "block";
-    document.getElementById("sampleButton").style.display = "none";
-}
 
-
-function sayHello() {
-    const name = document.getElementById("nameInput").value;
-    alert("Hello, " + name + "!");
-    console.log("Hey ho!");
-}
-
-
-function sample() {
-
-    // Definitions
-    const realInput = document.getElementById("realInput").value;
-    const imagInput = document.getElementById("imagInput").value;
-    const maxIters = 50; // TODO: This is hard coded and could be user set?
-    const url = "http://localhost:8000/sample" // TODO: Set port to global variable
-    const params = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            real: realInput,
-            imag: imagInput,
-            max_iters: maxIters,
-        })
-    };
-
-    // Fetch
-    fetch(url, params)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Number of iterations:", data);
-            document.getElementById("result").innerText = data;
-        })
-        .catch((error) => {
-            console.log('Error:', error)
-            console.log("Failed to sample point");
-        });
-}
-
+const baseUrl = "http://localhost:8000"
 
 function image() {
 
@@ -50,7 +7,8 @@ function image() {
     const xInput = document.getElementById("xInput").value;
     const yInput = document.getElementById("yInput").value;
     const sizeInput = document.getElementById("sizeInput").value;
-    const url = "http://localhost:8000/image"; // TODO: Set port to global variable
+    const depthInput = document.getElementById("depthInput").value;
+    const url = baseUrl+"/image";
     const params = {
         method: "POST", // Unless this is present it will default to "GET"
         headers: {
@@ -60,6 +18,7 @@ function image() {
             real: xInput,
             imag: yInput,
             size: sizeInput,
+            depth: depthInput,
         })
     };
 
@@ -70,8 +29,9 @@ function image() {
             console.log("Response blob received");
             const objectURL = URL.createObjectURL(blob);
             document.getElementById("image").src = objectURL; // To set image within html
-            //document.body.style.backgroundImage = `url(${objectURL})`; // To set background image
         })
+        //.then(document.getElementById("buttonId").disabled = true) // TODO: Disable button to prevent multiple requests
+        .then(console.log("Image displayed"))
         .catch((error) => {
             console.log('Error:', error)
             console.log("Failed to sample image");
