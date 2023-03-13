@@ -8,7 +8,7 @@ poetry install
 
 ##  Launch
 
-```
+```bash
 poetry run uvicorn api.main:app --reload --port=8000
 ```
 

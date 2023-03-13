@@ -1,6 +1,8 @@
 import io
 import numpy as np
 import matplotlib.pyplot as plt
+import hydra
+from omegaconf import DictConfig, OmegaConf
 
 
 def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
@@ -39,17 +41,34 @@ def create_image(real_start, real_end, imag_start, image_end, max_iters, width, 
     return buffer.getvalue()   # Return the png binary (avoids saving to disk)
 
 
-if __name__ == "__main__":
+@hydra.main(version_base=None, config_path="../.", config_name="config")
+def run(cfg : DictConfig):
+
+    #print(OmegaConf.to_yaml(cfg))
 
     # Parameters for part of set
-    rmin, rmax = -1.5, 0.5
-    imin, imax = -1., 1.
-    max_iters = 128 # Medium depth
-    width, height = 2000, 2000
-    file_name = "mandelbrot.png"
+    rmin, rmax = cfg["rmin"], cfg["rmax"]
+    imin, imax = cfg["imin"], cfg["imax"]
+    max_iters = cfg["max_iters"]
+    width, height = cfg["width"], cfg["height"]
+    outdir, outfile = cfg["outdir"], cfg["outfile"]
+    verbose = cfg["verbose"]
+
+    # Write to screen
+    if verbose:
+        print('Mandelbrot set parameters:')
+        print('Minimum and maximum real values:', rmin, rmax)
+        print('Minimum and maximum imaginary values:', imin, imax)
+        print('Maximum number of iterations:', max_iters)
+        print('Width and height of image:', width, height)
+        print('Output directory and file:', outdir, outfile)
+        print()
 
     # Display an image on screen and simulatanouesly save it
     create_image(rmin, rmax, imin, imax, max_iters, width, height)
-    plt.savefig("static/"+file_name, bbox_inches='tight', pad_inches=0)
+    plt.savefig(outdir+"/"+outfile, bbox_inches='tight', pad_inches=0)
     plt.show()
     plt.close()
+
+if __name__ == "__main__":
+    run()

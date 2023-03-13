@@ -1,0 +1,10 @@
+rmin: -1.5
+rmax: 0.5
+imin: -1.
+imax: 1.
+max_iters: 128
+width: 2000
+height: 2000
+outdir: static
+outfile: mandelbrot
+verbose: Truegit s
