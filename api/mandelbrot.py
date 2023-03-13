@@ -44,28 +44,29 @@ def create_image(real_start, real_end, imag_start, image_end, max_iters, width, 
 @hydra.main(version_base=None, config_path="../.", config_name="config")
 def run(cfg : DictConfig):
 
-    #print(OmegaConf.to_yaml(cfg))
-
-    # Parameters for part of set
-    rmin, rmax = cfg["rmin"], cfg["rmax"]
-    imin, imax = cfg["imin"], cfg["imax"]
-    max_iters = cfg["max_iters"]
+    # Parameters for part of set to display
+    iterations = cfg["iterations"]
     width, height = cfg["width"], cfg["height"]
     outdir, outfile = cfg["outdir"], cfg["outfile"]
     verbose = cfg["verbose"]
+    rmin = cfg["real"]-(1./cfg["zoom"])*cfg["width"]/cfg["height"]
+    rmax = cfg["real"]+(1./cfg["zoom"])*cfg["width"]/cfg["height"]
+    imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
+    cmap = cfg["cmap"]
 
     # Write to screen
     if verbose:
         print('Mandelbrot set parameters:')
         print('Minimum and maximum real values:', rmin, rmax)
         print('Minimum and maximum imaginary values:', imin, imax)
-        print('Maximum number of iterations:', max_iters)
+        print('Maximum number of iterations:', iterations)
         print('Width and height of image:', width, height)
         print('Output directory and file:', outdir, outfile)
         print()
 
+
     # Display an image on screen and simulatanouesly save it
-    create_image(rmin, rmax, imin, imax, max_iters, width, height)
+    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224, cmap=cmap)
     plt.savefig(outdir+"/"+outfile, bbox_inches='tight', pad_inches=0)
     plt.show()
     plt.close()

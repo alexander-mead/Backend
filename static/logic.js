@@ -6,7 +6,7 @@ function image() {
     // Definitions
     const xInput = document.getElementById("xInput").value;
     const yInput = document.getElementById("yInput").value;
-    const sizeInput = document.getElementById("sizeInput").value;
+    const zoomInput = document.getElementById("zoomInput").value;
     const depthInput = document.getElementById("depthInput").value;
     const url = baseUrl+"/image";
     const params = {
@@ -17,7 +17,7 @@ function image() {
         body: JSON.stringify({
             real: xInput,
             imag: yInput,
-            size: sizeInput,
+            zoom: zoomInput,
             depth: depthInput,
         })
     };

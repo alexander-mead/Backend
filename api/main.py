@@ -38,7 +38,7 @@ async def index(request: Request):
 class ImageInput(BaseModel):
     real: float
     imag: float
-    size: float
+    zoom: float
     depth: str
     width: int = 2000
     height: int = 2000
@@ -47,8 +47,8 @@ class ImageInput(BaseModel):
 # Mandelbrot image
 @app.post("/image")
 async def image(input: ImageInput):
-    rmin, rmax = input.real-input.size/2., input.real+input.size/2.
-    imin, imax = input.imag-input.size/2., input.imag+input.size/2.
+    rmin, rmax = input.real-(1./input.zoom), input.real+(1./input.zoom)
+    imin, imax = input.imag-(1./input.zoom), input.imag+(1./input.zoom)
     if input.depth == "low":
         max_iters = 64
     elif input.depth == "medium":
