@@ -56,6 +56,7 @@ def run(cfg : DictConfig):
 
     # Write to screen
     if verbose:
+        print()
         print('Mandelbrot set parameters:')
         print('Minimum and maximum real values:', rmin, rmax)
         print('Minimum and maximum imaginary values:', imin, imax)

@@ -1,7 +1,7 @@
 real: -0.5
 imag: 0.
 zoom: 1.
-iterations: 128
+iterations: 64
 width: 2000
 height: 2000
 outdir: static
