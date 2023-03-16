@@ -2,9 +2,10 @@ real: -0.5
 imag: 0.
 zoom: 1.
 iterations: 64
+sigma: 1.
 width: 2000
 height: 2000
-outdir: static
+outdir: images
 outfile: mandelbrot
 cmap: cubehelix
 verbose: True

@@ -1,8 +1,9 @@
 import io
 import numpy as np
+from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
 import hydra
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 
 
 def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
@@ -24,12 +25,13 @@ def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, h
 
 
 def create_image(real_start, real_end, imag_start, image_end, max_iters, width, height,
-                 cmap="cubehelix", figsize=(8, 8), dpi=150):
+                 cmap="cubehelix", figsize=(8, 8), dpi=224, sigma=0.):
     """
     Create a png and return it as a binary
     """
     array = sample_area(real_start, real_end, imag_start,
                         image_end, max_iters, width, height)
+    if sigma !=0.: array = gaussian_filter(array, sigma=sigma)
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
     plt.imshow(array, cmap=cmap, vmin=0, vmax=max_iters)
     plt.xticks([])
@@ -48,26 +50,26 @@ def run(cfg : DictConfig):
     iterations = cfg["iterations"]
     width, height = cfg["width"], cfg["height"]
     outdir, outfile = cfg["outdir"], cfg["outfile"]
-    verbose = cfg["verbose"]
     rmin = cfg["real"]-(1./cfg["zoom"])*cfg["width"]/cfg["height"]
     rmax = cfg["real"]+(1./cfg["zoom"])*cfg["width"]/cfg["height"]
     imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
-    cmap = cfg["cmap"]
+    sigma = cfg["sigma"]
 
     # Write to screen
-    if verbose:
+    if cfg["verbose"]:
         print()
         print('Mandelbrot set parameters:')
         print('Minimum and maximum real values:', rmin, rmax)
         print('Minimum and maximum imaginary values:', imin, imax)
         print('Maximum number of iterations:', iterations)
+        print('Sigma for Gaussian smoothing [pixels]:', sigma)
         print('Width and height of image:', width, height)
         print('Output directory and file:', outdir, outfile)
         print()
 
-
     # Display an image on screen and simulatanouesly save it
-    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224, cmap=cmap)
+    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224, 
+                 cmap=cfg["cmap"], sigma=sigma)
     plt.savefig(outdir+"/"+outfile, bbox_inches='tight', pad_inches=0)
     plt.show()
     plt.close()

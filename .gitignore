@@ -10,10 +10,10 @@ poetry.lock
 # Python
 __pycache__/
 
-# Crap
+# Data
 images/
 
-# hydra
+# Hydra
 outputs/
 
 # VSCode
