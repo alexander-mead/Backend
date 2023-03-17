@@ -2,7 +2,7 @@ real: -0.5
 imag: 0.
 zoom: 1.
 iterations: 64
-sigma: 0.5
+sigma: 0.75
 width: 2000
 height: 2000
 outdir: images
