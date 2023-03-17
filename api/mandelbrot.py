@@ -6,13 +6,13 @@ import hydra
 from omegaconf import DictConfig
 
 
-def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, height):
+def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, height):
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
     """
     x, y = np.meshgrid(np.linspace(real_start, real_end, width),
-                       np.linspace(imag_start, image_end, height))
+                       np.linspace(imag_end, imag_start, height))
     mandelbrot_set = np.zeros((height, width))
     c = x + y * 1j        # Map x, y to their complex values
     z = np.zeros_like(c)  # Initialise the value of 'z' at each location
@@ -24,14 +24,15 @@ def sample_area(real_start, real_end, imag_start, image_end, max_iters, width, h
     return mandelbrot_set
 
 
-def create_image(real_start, real_end, imag_start, image_end, max_iters, width, height,
-                 cmap="cubehelix", figsize=(8, 8), dpi=224, sigma=0.):
+def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
+                 cmap="cubehelix", figsize=(8, 8), dpi=224, sigma=1.):
     """
     Create a png and return it as a binary
     """
     array = sample_area(real_start, real_end, imag_start,
-                        image_end, max_iters, width, height)
-    if sigma !=0.: array = gaussian_filter(array, sigma=sigma)
+                        imag_end, max_iters, width, height)
+    if sigma != 0.:
+        array = gaussian_filter(array, sigma=sigma)
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
     plt.imshow(array, cmap=cmap, vmin=0, vmax=max_iters)
     plt.xticks([])
@@ -44,7 +45,7 @@ def create_image(real_start, real_end, imag_start, image_end, max_iters, width, 
 
 
 @hydra.main(version_base=None, config_path="../.", config_name="config")
-def run(cfg : DictConfig):
+def run(cfg: DictConfig):
 
     # Parameters for part of set to display
     iterations = cfg["iterations"]
@@ -54,25 +55,30 @@ def run(cfg : DictConfig):
     rmax = cfg["real"]+(1./cfg["zoom"])*cfg["width"]/cfg["height"]
     imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
     sigma = cfg["sigma"]
+    show = cfg["show"]
 
     # Write to screen
     if cfg["verbose"]:
         print()
-        print('Mandelbrot set parameters:')
-        print('Minimum and maximum real values:', rmin, rmax)
-        print('Minimum and maximum imaginary values:', imin, imax)
-        print('Maximum number of iterations:', iterations)
-        print('Sigma for Gaussian smoothing [pixels]:', sigma)
-        print('Width and height of image:', width, height)
-        print('Output directory and file:', outdir, outfile)
+        print("Mandelbrot set parameters:")
+        print("Minimum and maximum real values:", rmin, rmax)
+        print("Minimum and maximum imaginary values:", imin, imax)
+        print("Maximum number of iterations:", iterations)
+        print("Sigma for Gaussian smoothing [pixels]:", sigma)
+        print(f"Width and height of image: {width}, {height}")
+        print("Output directory:", outdir)
+        print("Output file:", outfile)
+        print("Printing to screen:", show)
         print()
 
     # Display an image on screen and simulatanouesly save it
-    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224, 
+    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224,
                  cmap=cfg["cmap"], sigma=sigma)
-    plt.savefig(outdir+"/"+outfile, bbox_inches='tight', pad_inches=0)
-    plt.show()
-    plt.close()
+    plt.savefig(outdir+"/"+outfile, bbox_inches="tight", pad_inches=0)
+    if show:
+        plt.show()
+        plt.close()
+
 
 if __name__ == "__main__":
     run()

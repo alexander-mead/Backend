@@ -28,6 +28,8 @@ app.add_middleware(
 ### Routes ###
 
 # Home page
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return settings.TEMPLATES.TemplateResponse("index.html", {"request": request})
@@ -59,9 +61,12 @@ async def image(input: ImageInput):
         raise ValueError("Invalid image depth")
     width, height = input.width, input.height
     print("Creating image")
-    binary_png = mandelbrot.create_image(rmin, rmax, imin, imax, max_iters, width, height)
-    headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'} # Necessary to tell that a png is being sent
+    binary_png = mandelbrot.create_image(
+        rmin, rmax, imin, imax, max_iters, width, height, sigma=0.5)
+    # Necessary to tell that a png is being sent
+    headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'}
     print("Sending image")
-    return Response(binary_png, headers=headers, media_type="image/png")   # Necessary to tell that a png is being sent
+    # Necessary to tell that a png is being sent
+    return Response(binary_png, headers=headers, media_type="image/png")
 
 ### ###
