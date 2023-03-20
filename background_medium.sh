@@ -1,17 +1,17 @@
 #!/bin/zsh
 
-real=-1.45994
-imag=0.00002
-zoom=10000.
-iterations=52
+real=-0.12
+imag=1.
+zoom=50.
+iterations=32
 sigma=0.75
-# width=2560
-# height=1664
-width=5120
-height=3328
+# width=1920
+# height=1080
+width=3840
+height=2160
 outdir='images'
-outfile='background_small.png'
-cmap='cubehelix'
+outfile='background_medium.png'
+cmap='bone'
 show=False
 
 poetry run python api/mandelbrot.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma \
