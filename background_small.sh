@@ -5,12 +5,10 @@ imag=0.00002
 zoom=10000.
 iterations=52
 sigma=0.75
-# width=2560
-# height=1664
-width=5120
-height=3328
+width=2560
+height=1664
 outdir='images'
-outfile='background_small.png'
+outfile='background_small'
 cmap='cubehelix'
 show=False
 

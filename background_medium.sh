@@ -5,12 +5,10 @@ imag=1.
 zoom=50.
 iterations=32
 sigma=0.75
-# width=1920
-# height=1080
-width=3840
-height=2160
+width=1920
+height=1080
 outdir='images'
-outfile='background_medium.png'
+outfile='background_medium'
 cmap='bone'
 show=False
 

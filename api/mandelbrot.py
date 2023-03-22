@@ -25,7 +25,7 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
 
 
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
-                 cmap="cubehelix", figsize=(8, 8), dpi=224, sigma=1.):
+                 cmap="cubehelix", dpi=224, sigma=1., outfile=None):
     """
     Create a png and return it as a binary
     """
@@ -33,14 +33,19 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
                         imag_end, max_iters, width, height)
     if sigma != 0.:
         array = gaussian_filter(array, sigma=sigma)
+    figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
-    plt.imshow(array, cmap=cmap, vmin=0, vmax=max_iters)
+    plt.imshow(array, cmap=cmap, vmin=0., vmax=max_iters)
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
+    if outfile is not None:
+        plt.savefig(outfile, bbox_inches='tight', format='jpg',
+                    pad_inches=0)  # Place the png as a binary in memory
     buffer = io.BytesIO()
-    plt.savefig(buffer, format="png", bbox_inches='tight',
+    plt.savefig(buffer, bbox_inches='tight', format='png',
                 pad_inches=0)  # Place the png as a binary in memory
+
     return buffer.getvalue()   # Return the png binary (avoids saving to disk)
 
 
@@ -73,8 +78,9 @@ def run(cfg: DictConfig):
 
     # Display an image on screen and simulatanouesly save it
     create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224,
-                 cmap=cfg["cmap"], sigma=sigma)
-    plt.savefig(outdir+"/"+outfile, bbox_inches="tight", pad_inches=0)
+                 cmap=cfg["cmap"], sigma=sigma, outfile=outdir+"/"+outfile)
+    # plt.savefig(outdir+"/"+outfile, format="jpg",
+    #             bbox_inches="tight", pad_inches=0)
     if show:
         plt.show()
         plt.close()
