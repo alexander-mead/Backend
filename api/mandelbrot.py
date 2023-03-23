@@ -25,7 +25,7 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
 
 
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
-                 cmap="cubehelix", dpi=224, sigma=1., outfile=None):
+                 cmap="cubehelix", dpi=224, sigma=1., format="png"):
     """
     Create a png and return it as a binary
     """
@@ -39,14 +39,11 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
-    if outfile is not None:
-        plt.savefig(outfile, bbox_inches='tight', format='jpg',
-                    pad_inches=0)  # Place the png as a binary in memory
     buffer = io.BytesIO()
-    plt.savefig(buffer, bbox_inches='tight', format='png',
-                pad_inches=0)  # Place the png as a binary in memory
-
-    return buffer.getvalue()   # Return the png binary (avoids saving to disk)
+    plt.savefig(buffer, bbox_inches='tight', format=format,
+                pad_inches=0)  # Place the image as a binary in memory
+    buffer = buffer.getvalue()
+    return buffer   # Return the image binary (avoids saving to disk)
 
 
 @hydra.main(version_base=None, config_path="../.", config_name="config")
@@ -56,6 +53,7 @@ def run(cfg: DictConfig):
     iterations = cfg["iterations"]
     width, height = cfg["width"], cfg["height"]
     outdir, outfile = cfg["outdir"], cfg["outfile"]
+    format = cfg["format"]
     rmin = cfg["real"]-(1./cfg["zoom"])*cfg["width"]/cfg["height"]
     rmax = cfg["real"]+(1./cfg["zoom"])*cfg["width"]/cfg["height"]
     imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
@@ -72,15 +70,16 @@ def run(cfg: DictConfig):
         print("Sigma for Gaussian smoothing [pixels]:", sigma)
         print(f"Width and height of image: {width}, {height}")
         print("Output directory:", outdir)
-        print("Output file:", outfile)
+        print("Output file:", outfile+"."+format)
         print("Printing to screen:", show)
         print()
 
     # Display an image on screen and simulatanouesly save it
-    create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224,
-                 cmap=cfg["cmap"], sigma=sigma, outfile=outdir+"/"+outfile)
-    # plt.savefig(outdir+"/"+outfile, format="jpg",
-    #             bbox_inches="tight", pad_inches=0)
+    data = create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224,
+                        cmap=cfg["cmap"], sigma=sigma, format=format)
+    outfile = outdir+"/"+outfile+"."+format
+    with open(outfile, 'wb') as f:
+        f.write(data)
     if show:
         plt.show()
         plt.close()

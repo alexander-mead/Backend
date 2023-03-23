@@ -8,5 +8,6 @@ height: 2000
 outdir: images
 outfile: mandelbrot
 cmap: cubehelix
+format: png
 verbose: True
 show: True
