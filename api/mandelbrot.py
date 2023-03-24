@@ -25,7 +25,7 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
 
 
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
-                 sigma=1., transform=None,
+                 sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png"):
     """
     Create a png and return it as a binary

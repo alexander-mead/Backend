@@ -1,16 +1,17 @@
 #!/bin/zsh
 
-real=-0.600
-imag=-0.429
-zoom=1035
-iterations=2000
+real=0.2613577
+imag=-0.002018128
+zoom=3000.
+iterations=256
 sigma=0.5
-transform='cube_root'
+transform=None
 width=3440
 height=1440
 outdir='images'
-outfile='background_large_02'
-cmap='hot'
+outfile='background_large_03'
+# cmap='afmhot'
+cmap='twilight_shifted'
 format='png'
 show=False
 

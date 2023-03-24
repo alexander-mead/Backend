@@ -1,16 +1,16 @@
 #!/bin/zsh
 
-real=-0.600
-imag=-0.429
-zoom=1035
-iterations=2000
+real=-0.5
+imag=0.
+zoom=1.
+iterations=512
 sigma=0.5
 transform='cube_root'
-width=3440
-height=1440
+width=1920
+height=1080
 outdir='images'
-outfile='background_large_02'
-cmap='hot'
+outfile='background_medium_03'
+cmap='cubehelix'
 format='png'
 show=False
 
