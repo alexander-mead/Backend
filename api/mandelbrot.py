@@ -25,17 +25,31 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
 
 
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
-                 cmap="cubehelix", dpi=224, sigma=1., format="png"):
+                 sigma=1., transform=None,
+                 cmap="cubehelix", dpi=224, format="png"):
     """
     Create a png and return it as a binary
     """
     array = sample_area(real_start, real_end, imag_start,
                         imag_end, max_iters, width, height)
+    array /= max_iters-1  # Normalise
     if sigma != 0.:
         array = gaussian_filter(array, sigma=sigma)
+    if transform is None:
+        pass
+    elif transform == "log":
+        array = np.log(1.+array)/np.log(2.)
+    elif transform == "square_root":
+        array = np.sqrt(array)
+    elif transform == "cube_root":
+        array = np.cbrt(array)
+    elif type(transform) is float:
+        array = array**transform
+    else:
+        raise ValueError("Transform not recognised")
     figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
-    plt.imshow(array, cmap=cmap, vmin=0., vmax=max_iters)
+    plt.imshow(array, cmap=cmap, vmin=0., vmax=1.)  # , vmax=max(array))
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
@@ -59,6 +73,7 @@ def run(cfg: DictConfig):
     imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
     sigma = cfg["sigma"]
     show = cfg["show"]
+    transform = None if cfg["transform"] == "None" else cfg["transform"]
 
     # Write to screen
     if cfg["verbose"]:
@@ -68,6 +83,7 @@ def run(cfg: DictConfig):
         print("Minimum and maximum imaginary values:", imin, imax)
         print("Maximum number of iterations:", iterations)
         print("Sigma for Gaussian smoothing [pixels]:", sigma)
+        print("Transform:", transform)
         print(f"Width and height of image: {width}, {height}")
         print("Output directory:", outdir)
         print("Output file:", outfile+"."+format)
@@ -75,10 +91,11 @@ def run(cfg: DictConfig):
         print()
 
     # Display an image on screen and simulatanouesly save it
-    data = create_image(rmin, rmax, imin, imax, iterations, width, height, dpi=224,
-                        cmap=cfg["cmap"], sigma=sigma, format=format)
+    data = create_image(rmin, rmax, imin, imax, iterations, width, height,
+                        sigma=sigma, transform=transform,
+                        dpi=224, cmap=cfg["cmap"], format=format)
     outfile = outdir+"/"+outfile+"."+format
-    with open(outfile, 'wb') as f:
+    with open(outfile, "wb") as f:
         f.write(data)
     if show:
         plt.show()
