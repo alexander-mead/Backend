@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-real=-1.45994
-imag=0.00002
-zoom=10000.
-iterations=52
+real=-1.44
+imag=0.0015
+zoom=102.
+iterations=28
 sigma=0.5
-transform=None
+transform=0.8
 width=2560
 height=1664
 outdir='images'

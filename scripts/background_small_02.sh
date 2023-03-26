@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-real=-1.401
+real=-1.405
 imag=0.0
-zoom=100.
-iterations=150
+zoom=95.
+iterations=512
 sigma=0.5
 transform='log'
 width=2560

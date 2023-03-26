@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-real=-1.25
+real=-1.425
 imag=0.
-zoom=3.2
+zoom=30.
 iterations=256
 sigma=0.5
 transform='square_root'

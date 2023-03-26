@@ -24,17 +24,10 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
     return mandelbrot_set
 
 
-def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
-                 sigma=0.5, transform=None,
-                 cmap="cubehelix", dpi=224, format="png"):
+def transform_image(array, transform):
     """
-    Create a png and return it as a binary
+    Apply a transform to the image
     """
-    array = sample_area(real_start, real_end, imag_start,
-                        imag_end, max_iters, width, height)
-    array /= max_iters-1  # Normalise
-    if sigma != 0.:
-        array = gaussian_filter(array, sigma=sigma)
     if transform is None:
         pass
     elif transform == "log":
@@ -47,6 +40,21 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
         array = array**transform
     else:
         raise ValueError("Transform not recognised")
+    return array
+
+
+def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
+                 sigma=0.5, transform=None,
+                 cmap="cubehelix", dpi=224, format="png"):
+    """
+    Create a png and return it as a binary
+    """
+    array = sample_area(real_start, real_end, imag_start,
+                        imag_end, max_iters, width, height)
+    array /= max_iters-1  # Normalise
+    if sigma != 0.:
+        array = gaussian_filter(array, sigma=sigma)
+    array = transform_image(array, transform)
     figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
     plt.imshow(array, cmap=cmap, vmin=0., vmax=1.)  # , vmax=max(array))
