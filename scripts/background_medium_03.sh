@@ -2,7 +2,7 @@
 
 real=-0.5
 imag=0.
-zoom=1.
+zoom=1.1
 iterations=512
 sigma=0.5
 transform='cube_root'
@@ -10,7 +10,7 @@ width=1920
 height=1080
 outdir='images'
 outfile='background_medium_03'
-cmap='cubehelix'
+cmap='afmhot'
 format='png'
 show=False
 
