@@ -10,8 +10,7 @@ width=2560
 height=1664
 outdir='images'
 outfile='background_small_03'
-cmap='twilight_shifted'
-cmap='flag'
+cmap='flag_r'
 format='png'
 show=False
 

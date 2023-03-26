@@ -1,16 +1,16 @@
 #!/bin/zsh
 
-real=0.2613577
-imag=-0.002018128
-zoom=3000.
-iterations=256
+real=-0.34852
+imag=-0.60653
+zoom=5000.
+iterations=10000
 sigma=0.5
-transform=None
-width=3440
-height=1440
+transform='square_root'
+width=1920
+height=1080
 outdir='images'
-outfile='background_large_03'
-cmap='twilight_shifted'
+outfile='background_medium_04'
+cmap='cubehelix'
 format='png'
 show=False
 

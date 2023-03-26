@@ -1,16 +1,17 @@
 #!/bin/zsh
 
-real=0.2613577
-imag=-0.002018128
-zoom=3000.
+real=-1.373
+imag=-0.0123
+zoom=600.
 iterations=256
 sigma=0.5
-transform=None
-width=3440
-height=1440
+transform='log'
+width=2560
+height=1664
 outdir='images'
-outfile='background_large_03'
+outfile='background_small_04'
 cmap='twilight_shifted'
+cmap='bone'
 format='png'
 show=False
 

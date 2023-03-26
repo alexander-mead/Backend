@@ -89,6 +89,8 @@ def run(cfg: DictConfig):
         print("Mandelbrot set parameters:")
         print("Minimum and maximum real values:", rmin, rmax)
         print("Minimum and maximum imaginary values:", imin, imax)
+        print("Image centre (real, imaginary):", cfg["real"], cfg["imag"])
+        print("Image extent (real, imaginary):", rmax-rmin, imax-imin)
         print("Maximum number of iterations:", iterations)
         print("Sigma for Gaussian smoothing [pixels]:", sigma)
         print("Transform:", transform)
