@@ -20,6 +20,8 @@ outputs/
 *.mod
 *.o
 f90wrap*.f90
+*.f2py_f2cmap
+*.so
 
 # VSCode
 .vscode/
