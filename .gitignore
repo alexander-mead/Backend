@@ -16,5 +16,10 @@ images/
 # Hydra
 outputs/
 
+# Fortran
+*.mod
+*.o
+f90wrap*.f90
+
 # VSCode
 .vscode/
