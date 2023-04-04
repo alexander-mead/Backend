@@ -13,6 +13,7 @@ outfile='background_small_05'
 cmap='RdPu_r'
 format='png'
 show=False
+bound=False
 
 poetry run python api/mandelbrot.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\
-    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format show=$show
+    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format show=$show bound_image=$bound

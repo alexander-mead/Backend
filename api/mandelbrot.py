@@ -52,7 +52,7 @@ def transform_image(array, transform):
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
                  sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png",
-                 use_Fortran=True):
+                 bound_image=False, use_Fortran=True):
     """
     Create a png and return it as a binary
     """
@@ -70,7 +70,8 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
     array = transform_image(array, transform)
     figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
-    plt.imshow(array, cmap=cmap, vmin=0., vmax=1.)  # , vmax=max(array))
+    vmin, vmax = (0., 1.) if bound_image else (None, None)
+    plt.imshow(array, cmap=cmap, vmin=vmin, vmax=vmax)
     plt.xticks([])
     plt.yticks([])
     plt.tight_layout()
@@ -111,12 +112,15 @@ def run(cfg: DictConfig):
         print("Output directory:", outdir)
         print("Output file:", outfile+"."+format)
         print("Printing to screen:", show)
+        print("Bound image:", cfg["bound_image"])
+        print("Use Fortran:", cfg["use_Fortran"])
         print()
 
     # Display an image on screen and simulatanouesly save it
     data = create_image(rmin, rmax, imin, imax, iterations, width, height,
                         sigma=sigma, transform=transform,
-                        dpi=224, cmap=cfg["cmap"], format=format)
+                        dpi=224, cmap=cfg["cmap"], format=format,
+                        bound_image=cfg["bound_image"], use_Fortran=cfg["use_Fortran"])
     outfile = outdir+"/"+outfile+"."+format
     with open(outfile, "wb") as f:
         f.write(data)
