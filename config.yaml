@@ -11,6 +11,7 @@ outfile: mandelbrot
 cmap: cubehelix
 format: png
 verbose: True
-show: True
-use_Fortran: True
+show: False
+smooth_image: True
 bound_image: True
+use_Fortran: True

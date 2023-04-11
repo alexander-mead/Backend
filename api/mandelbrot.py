@@ -9,10 +9,10 @@ import hydra
 from omegaconf import DictConfig
 
 # Project imports
-from Fortran import sample_area as Fortran_sample_area
+from Fortran import mandelbrot
 
 
-def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, height):
+def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -25,7 +25,11 @@ def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, he
     for i in range(max_iters):
         z = z**2 + c               # Iterate
         mask = np.abs(z) > 2.      # Select points that are diverging
-        mandelbrot_set[mask] = i   # Set is number of iterations for divergence
+        if smooth:  # Fractional iteration count
+            mandelbrot_set[mask] = i + 1. - \
+                np.log(np.log(np.abs(z[mask])))/np.log(2.)
+        else:  # Set is number of iterations for divergence
+            mandelbrot_set[mask] = i
         z[mask], c[mask] = 0., 0.  # Reset the diverging point so that it will not diverge in future
     return mandelbrot_set
 
@@ -52,25 +56,25 @@ def transform_image(array, transform):
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
                  sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png",
-                 bound_image=False, use_Fortran=True):
+                 smooth=False, bound=False, Fortran=False):
     """
     Create a png and return it as a binary
     """
 
-    if use_Fortran:
-        array = Fortran_sample_area(real_start, real_end, imag_start,
-                                    imag_end, max_iters, width, height, width, height)
-        array = array.T/(max_iters-1)
+    if Fortran:
+        array = mandelbrot.sample_area(real_start, real_end, imag_start,
+                                       imag_end, max_iters, width, height, smooth)
+        array = array.T / (max_iters-1)
     else:
         array = sample_area(real_start, real_end, imag_start,
-                            imag_end, max_iters, width, height)
+                            imag_end, max_iters, width, height, smooth=smooth)
         array /= max_iters-1
     if sigma != 0.:
         array = gaussian_filter(array, sigma=sigma)
     array = transform_image(array, transform)
     figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
-    vmin, vmax = (0., 1.) if bound_image else (None, None)
+    vmin, vmax = (0., 1.) if bound else (None, None)
     plt.imshow(array, cmap=cmap, vmin=vmin, vmax=vmax)
     plt.xticks([])
     plt.yticks([])
@@ -112,6 +116,7 @@ def run(cfg: DictConfig):
         print("Output directory:", outdir)
         print("Output file:", outfile+"."+format)
         print("Printing to screen:", show)
+        print("Smooth image", cfg['smooth_image'])
         print("Bound image:", cfg["bound_image"])
         print("Use Fortran:", cfg["use_Fortran"])
         print()
@@ -120,7 +125,8 @@ def run(cfg: DictConfig):
     data = create_image(rmin, rmax, imin, imax, iterations, width, height,
                         sigma=sigma, transform=transform,
                         dpi=224, cmap=cfg["cmap"], format=format,
-                        bound_image=cfg["bound_image"], use_Fortran=cfg["use_Fortran"])
+                        smooth=cfg['smooth_image'], bound=cfg["bound_image"],
+                        Fortran=cfg["use_Fortran"])
     outfile = outdir+"/"+outfile+"."+format
     with open(outfile, "wb") as f:
         f.write(data)

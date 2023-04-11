@@ -9,18 +9,18 @@ class Mandelbrot(f90wrap.runtime.FortranModule):
     Module mandelbrot
     
     
-    Defined at mandelbrot.f90 lines 1-58
+    Defined at mandelbrot.f90 lines 1-66
     
     """
     @staticmethod
     def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, \
-        height):
+        height, smooth):
         """
         set = sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, \
-            height)
+            height, smooth)
         
         
-        Defined at mandelbrot.f90 lines 8-31
+        Defined at mandelbrot.f90 lines 8-36
         
         Parameters
         ----------
@@ -31,15 +31,16 @@ class Mandelbrot(f90wrap.runtime.FortranModule):
         max_iters : int
         width : int
         height : int
+        smooth : bool
         
         Returns
         -------
-        set : int array
+        set : float array
         
         """
         set = _mandelbrot.f90wrap_sample_area(real_start=real_start, real_end=real_end, \
             imag_start=imag_start, imag_end=imag_end, max_iters=max_iters, width=width, \
-            height=height)
+            height=height, smooth=smooth)
         return set
     
     _dt_array_initialisers = []
