@@ -6,8 +6,6 @@ import math
 import numpy as np
 from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
-import hydra
-from omegaconf import DictConfig
 from numba import njit, prange
 
 # Project imports
@@ -151,56 +149,3 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
                 pad_inches=0)  # Place the image as a binary in memory
     buffer = buffer.getvalue()
     return buffer   # Return the image binary (avoids saving to disk)
-
-
-@hydra.main(version_base=None, config_path="../.", config_name="config")
-def run(cfg: DictConfig):
-
-    # Parameters for part of set to display
-    iterations = cfg["iterations"]
-    width, height = cfg["width"], cfg["height"]
-    outdir, outfile = cfg["outdir"], cfg["outfile"]
-    format = cfg["format"]
-    rmin = cfg["real"]-(1./cfg["zoom"])*cfg["width"]/cfg["height"]
-    rmax = cfg["real"]+(1./cfg["zoom"])*cfg["width"]/cfg["height"]
-    imin, imax = cfg["imag"]-(1./cfg["zoom"]), cfg["imag"]+(1./cfg["zoom"])
-    sigma = cfg["sigma"]
-    show = cfg["show"]
-    transform = None if cfg["transform"] == "None" else cfg["transform"]
-
-    # Write to screen
-    if cfg["verbose"]:
-        print()
-        print("Mandelbrot set parameters:")
-        print("Minimum and maximum real values:", rmin, rmax)
-        print("Minimum and maximum imaginary values:", imin, imax)
-        print("Image centre (real, imaginary):", cfg["real"], cfg["imag"])
-        print("Image extent (real, imaginary):", rmax-rmin, imax-imin)
-        print("Maximum number of iterations:", iterations)
-        print("Sigma for Gaussian smoothing [pixels]:", sigma)
-        print("Transform:", transform)
-        print(f"Width and height of image: {width}, {height}")
-        print("Output directory:", outdir)
-        print("Output file:", outfile+"."+format)
-        print("Printing to screen:", show)
-        print("Smooth image:", cfg['smooth_image'])
-        print("Bound image:", cfg["bound_image"])
-        print("Method:", cfg["method"])
-        print()
-
-    # Display an image on screen and simulatanouesly save it
-    data = create_image(rmin, rmax, imin, imax, iterations, width, height,
-                        sigma=sigma, transform=transform,
-                        dpi=224, cmap=cfg["cmap"], format=format,
-                        smooth=cfg['smooth_image'], bound=cfg["bound_image"],
-                        method=cfg["method"])
-    outfile = outdir+"/"+outfile+"."+format
-    with open(outfile, "wb") as f:
-        f.write(data)
-    if show:
-        plt.show()
-        plt.close()
-
-
-if __name__ == "__main__":
-    run()
