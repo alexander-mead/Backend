@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 real=-0.600
 imag=-0.429

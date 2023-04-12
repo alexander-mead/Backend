@@ -1,5 +1,6 @@
 # Standard imports
 import io
+import math
 
 # Third-part imports
 import numpy as np
@@ -31,7 +32,7 @@ def sample_area_python(real_start, real_end, imag_start, imag_end, max_iters, wi
                 if np.abs(z) > 2.:  # Divergence
                     if smooth:  # Fractional iteration count
                         n = i + 1. - \
-                            np.log(np.log(np.abs(z)))/np.log(2.)
+                            math.log(math.log(abs(z)))/math.log(2.)
                     else:
                         n = i
                     break
@@ -110,7 +111,7 @@ def transform_image(array, transform):
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
                  sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png",
-                 smooth=False, bound=False, method="Fortran"):
+                 smooth=True, bound=True, method="Fortran"):
     """
     Create a png and return it as a binary
     """
@@ -182,7 +183,7 @@ def run(cfg: DictConfig):
         print("Output directory:", outdir)
         print("Output file:", outfile+"."+format)
         print("Printing to screen:", show)
-        print("Smooth image", cfg['smooth_image'])
+        print("Smooth image:", cfg['smooth_image'])
         print("Bound image:", cfg["bound_image"])
         print("Method:", cfg["method"])
         print()
