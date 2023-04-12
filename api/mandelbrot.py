@@ -12,7 +12,33 @@ from omegaconf import DictConfig
 from Fortran import mandelbrot
 
 
-def sample_area(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+def sample_area_python(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+    """
+    Loops over an area and assigns points to the Mandelbrot set
+    Thanks chatGPT for this vectorized version (although it was wrong to begin with)
+    """
+    m = np.zeros((height, width))
+    for irow in range(height):
+        for icol in range(width):
+            x = real_start + (real_end - real_start) * icol / width
+            y = imag_end + (imag_start - imag_end) * irow / height
+            z = 0.
+            c = x + y * 1j
+            n = 0
+            for i in range(max_iters):
+                z = z**2 + c
+                if np.abs(z) > 2.:  # Divergence
+                    if smooth:  # Fractional iteration count
+                        n = i + 1. - \
+                            np.log(np.log(np.abs(z)))/np.log(2.)
+                    else:
+                        n = i
+                    break
+            m[irow, icol] = n
+    return m
+
+
+def sample_area_numpy(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -56,19 +82,29 @@ def transform_image(array, transform):
 def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
                  sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png",
-                 smooth=False, bound=False, Fortran=False):
+                 smooth=False, bound=False, method="Fortran"):
     """
     Create a png and return it as a binary
     """
 
-    if Fortran:
+    if method == "Fortran":
         array = mandelbrot.sample_area(real_start, real_end, imag_start,
-                                       imag_end, max_iters, width, height, smooth)
-        array = array.T / (max_iters-1)
+                                       imag_end, max_iters, width, height,
+                                       smooth)
+        array = array.T
+    elif method == "python":
+        array = sample_area_python(real_start, real_end, imag_start,
+                                   imag_end, max_iters, width, height,
+                                   smooth)
+    elif method == "numpy":
+        array = sample_area_numpy(real_start, real_end, imag_start,
+                                  imag_end, max_iters, width, height,
+                                  smooth)
+    elif method == "numba":
+        raise NotImplementedError("Numba not implemented")
     else:
-        array = sample_area(real_start, real_end, imag_start,
-                            imag_end, max_iters, width, height, smooth=smooth)
-        array /= max_iters-1
+        raise ValueError("Method not recognised")
+    array = array/(max_iters-1)
     if sigma != 0.:
         array = gaussian_filter(array, sigma=sigma)
     array = transform_image(array, transform)
@@ -118,7 +154,7 @@ def run(cfg: DictConfig):
         print("Printing to screen:", show)
         print("Smooth image", cfg['smooth_image'])
         print("Bound image:", cfg["bound_image"])
-        print("Use Fortran:", cfg["use_Fortran"])
+        print("Method:", cfg["method"])
         print()
 
     # Display an image on screen and simulatanouesly save it
@@ -126,7 +162,7 @@ def run(cfg: DictConfig):
                         sigma=sigma, transform=transform,
                         dpi=224, cmap=cfg["cmap"], format=format,
                         smooth=cfg['smooth_image'], bound=cfg["bound_image"],
-                        Fortran=cfg["use_Fortran"])
+                        method=cfg["method"])
     outfile = outdir+"/"+outfile+"."+format
     with open(outfile, "wb") as f:
         f.write(data)

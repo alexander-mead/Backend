@@ -22,6 +22,7 @@ outputs/
 f90wrap*.f90
 *.f2py_f2cmap
 *.so
+api/Fortran/mandelbrot.py
 
 # VSCode
 .vscode/
