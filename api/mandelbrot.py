@@ -7,12 +7,40 @@ from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
 import hydra
 from omegaconf import DictConfig
+from numba import njit
 
 # Project imports
 from Fortran import mandelbrot
 
 
 def sample_area_python(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+    """
+    Loops over an area and assigns points to the Mandelbrot set
+    Thanks chatGPT for this vectorized version (although it was wrong to begin with)
+    """
+    m = np.zeros((height, width))
+    for irow in range(height):
+        for icol in range(width):
+            x = real_start + (real_end - real_start) * icol / width
+            y = imag_end + (imag_start - imag_end) * irow / height
+            z = 0.
+            c = x + y * 1j
+            n = 0
+            for i in range(max_iters):
+                z = z**2 + c
+                if np.abs(z) > 2.:  # Divergence
+                    if smooth:  # Fractional iteration count
+                        n = i + 1. - \
+                            np.log(np.log(np.abs(z)))/np.log(2.)
+                    else:
+                        n = i
+                    break
+            m[irow, icol] = n
+    return m
+
+
+@njit(parallel=True)
+def sample_area_numba(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -101,7 +129,9 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
                                   imag_end, max_iters, width, height,
                                   smooth)
     elif method == "numba":
-        raise NotImplementedError("Numba not implemented")
+        array = sample_area_numba(real_start, real_end, imag_start,
+                                  imag_end, max_iters, width, height,
+                                  smooth)
     else:
         raise ValueError("Method not recognised")
     array = array/(max_iters-1)
