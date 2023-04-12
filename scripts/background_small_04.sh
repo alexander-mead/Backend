@@ -13,7 +13,6 @@ outfile='background_small_04'
 cmap='twilight_shifted'
 cmap='bone'
 format='png'
-show=False
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\
-    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format show=$show
+    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format
