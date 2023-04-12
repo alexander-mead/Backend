@@ -7,7 +7,7 @@ from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
 import hydra
 from omegaconf import DictConfig
-from numba import njit
+from numba import njit, prange
 
 # Project imports
 from Fortran import mandelbrot
@@ -46,8 +46,8 @@ def sample_area_numba(real_start, real_end, imag_start, imag_end, max_iters, wid
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
     """
     m = np.zeros((height, width))
-    for irow in range(height):
-        for icol in range(width):
+    for irow in prange(height):
+        for icol in prange(width):
             x = real_start + (real_end - real_start) * icol / width
             y = imag_end + (imag_start - imag_end) * irow / height
             z = 0.
