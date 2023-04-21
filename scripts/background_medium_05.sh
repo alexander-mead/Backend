@@ -15,4 +15,4 @@ format='png'
 bound=False
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\
-    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format bound_image=$bound
+    width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format bound=$bound

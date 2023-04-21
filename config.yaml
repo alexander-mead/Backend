@@ -12,6 +12,6 @@ cmap: cubehelix
 format: png
 verbose: True
 show: False
-smooth_image: True
-bound_image: True
+smooth: True
+bound: True
 method: numba

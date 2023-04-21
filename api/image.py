@@ -37,8 +37,8 @@ def run(cfg: DictConfig):
         print("Output directory:", outdir)
         print("Output file:", outfile+"."+format)
         print("Printing to screen:", show)
-        print("Smooth image:", cfg['smooth_image'])
-        print("Bound image:", cfg["bound_image"])
+        print("Smooth image:", cfg["smooth"])
+        print("Bound image:", cfg["bound"])
         print("Method:", cfg["method"])
         print()
 
@@ -46,7 +46,7 @@ def run(cfg: DictConfig):
     data = mandelbrot.create_image(rmin, rmax, imin, imax, iterations, width, height,
                                    sigma=sigma, transform=transform,
                                    dpi=224, cmap=cfg["cmap"], format=format,
-                                   smooth=cfg['smooth_image'], bound=cfg["bound_image"],
+                                   smooth=cfg["smooth"], bound=cfg["bound"],
                                    method=cfg["method"])
     outfile = outdir+"/"+outfile+"."+format
     with open(outfile, "wb") as f:

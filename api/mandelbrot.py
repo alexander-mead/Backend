@@ -12,7 +12,8 @@ from numba import njit, prange
 from Fortran import mandelbrot
 
 
-def sample_area_python(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+def sample_area_python(real_start: float, real_end: float, imag_start: float, imag_end: float,
+                       max_iters: int, width: int, height: int, smooth=False) -> np.array:
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -39,7 +40,8 @@ def sample_area_python(real_start, real_end, imag_start, imag_end, max_iters, wi
 
 
 @njit(parallel=True)
-def sample_area_numba(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+def sample_area_numba(real_start: float, real_end: float, imag_start: float, imag_end: float,
+                      max_iters: int, width: int, height: int, smooth=False) -> np.array:
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -65,7 +67,8 @@ def sample_area_numba(real_start, real_end, imag_start, imag_end, max_iters, wid
     return m
 
 
-def sample_area_numpy(real_start, real_end, imag_start, imag_end, max_iters, width, height, smooth=False):
+def sample_area_numpy(real_start: float, real_end: float, imag_start: float, imag_end: float,
+                      max_iters: int, width: int, height: int, smooth=False) -> np.array:
     """
     Loops over an area and assigns points to the Mandelbrot set
     Thanks chatGPT for this vectorized version (although it was wrong to begin with)
@@ -87,9 +90,10 @@ def sample_area_numpy(real_start, real_end, imag_start, imag_end, max_iters, wid
     return mandelbrot_set
 
 
-def transform_image(array, transform):
+def transform_image(array: np.array, transform: str | float) -> np.array:
     """
-    Apply a transform to the image
+    Apply a transform to the image, initial pixel values are between 0 and 1
+    Final pixel values should also be between 0 and 1
     """
     if transform is None:
         pass
@@ -101,25 +105,24 @@ def transform_image(array, transform):
         array = np.cbrt(array)
     elif type(transform) is float:
         array = array**transform
+    elif transform == "inverse":
+        array[array == 0.] = 1.
+        array = (1./(1.+array)-0.5)/0.5
     else:
         raise ValueError("Transform not recognised")
     return array
 
 
-def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, height,
+def create_image(real_start: float, real_end: float, imag_start: float, imag_end: float,
+                 max_iters: int, width: int, height: int,
                  sigma=0.5, transform=None,
                  cmap="cubehelix", dpi=224, format="png",
-                 smooth=True, bound=True, method="Fortran"):
+                 smooth=True, bound=True, method="Fortran") -> bytes:
     """
     Create a png and return it as a binary
     """
 
-    if method == "Fortran":
-        array = mandelbrot.sample_area(real_start, real_end, imag_start,
-                                       imag_end, max_iters, width, height,
-                                       smooth)
-        array = array.T
-    elif method == "python":
+    if method == "python":
         array = sample_area_python(real_start, real_end, imag_start,
                                    imag_end, max_iters, width, height,
                                    smooth)
@@ -127,15 +130,23 @@ def create_image(real_start, real_end, imag_start, imag_end, max_iters, width, h
         array = sample_area_numpy(real_start, real_end, imag_start,
                                   imag_end, max_iters, width, height,
                                   smooth)
+    elif method == "Fortran":
+        array = mandelbrot.sample_area(real_start, real_end, imag_start,
+                                       imag_end, max_iters, width, height,
+                                       smooth)
+        array = array.T
     elif method == "numba":
         array = sample_area_numba(real_start, real_end, imag_start,
                                   imag_end, max_iters, width, height,
                                   smooth)
     else:
         raise ValueError("Method not recognised")
-    array = array/(max_iters-1)
+    # print("Min/max pre-shrink; pre-smooth:", array.min(), array.max())
+    array = array/array.max() if smooth else array/(max_iters-1)
+    # print("Min/max post-shrink; pre-smooth:", array.min(), array.max())
     if sigma != 0.:
         array = gaussian_filter(array, sigma=sigma)
+    # print("Min/max post-shrink; post-smooth:", array.min(), array.max())
     array = transform_image(array, transform)
     figsize = width/dpi, height/dpi
     plt.subplots(figsize=figsize, dpi=dpi, frameon=False)
