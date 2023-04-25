@@ -3,14 +3,14 @@
 real=-0.4601222
 imag=0.5702860
 zoom=10000.
-iterations=1024
+iterations=256
 sigma=0.5
-transform=1.2
+transform='centralize_high'
 width=1920
 height=1080
 outdir='images'
 outfile='background_medium_05'
-cmap='rainbow'
+cmap='jet'
 format='png'
 bound=False
 
