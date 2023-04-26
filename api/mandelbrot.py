@@ -153,7 +153,7 @@ def transform_image(array: np.array, transform: str | float) -> np.array:
 
 def create_image(real_start: float, real_end: float, imag_start: float, imag_end: float,
                  max_iters: int, width: int, height: int,
-                 sigma=0.5, transform=None,
+                 sigma=0.5, transform=None, pad_inches=0.,
                  cmap="cubehelix", dpi=224, format="png",
                  smooth=True, bound=True, method="Fortran") -> bytes:
     """
@@ -195,6 +195,6 @@ def create_image(real_start: float, real_end: float, imag_start: float, imag_end
     plt.tight_layout()
     buffer = io.BytesIO()
     plt.savefig(buffer, bbox_inches='tight', format=format,
-                pad_inches=0.)  # Place the image as a binary in memory
+                pad_inches=pad_inches)  # Place the image as a binary in memory
     buffer = buffer.getvalue()
     return buffer   # Return the image binary (avoids saving to disk)
