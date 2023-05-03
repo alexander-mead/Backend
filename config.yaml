@@ -15,3 +15,4 @@ show: False
 smooth: True
 bound: True
 method: numba
+resample: 3
