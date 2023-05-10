@@ -44,10 +44,10 @@ def run(cfg: DictConfig):
 
     # Display an image on screen and simulatanouesly save it
     data = mandelbrot.create_image(rmin, rmax, imin, imax, iterations, width, height,
-                                   sigma=sigma, transform=transform,
+                                   smooth_sigma=sigma, transform=transform,
                                    dpi=224, cmap=cfg["cmap"], format=format,
-                                   smooth=cfg["smooth"], bound=cfg["bound"],
-                                   method=cfg["method"])
+                                   fractional_escape=cfg["smooth"], bound_colorbar=cfg["bound"],
+                                   calculation_method=cfg["method"])
     outfile = outdir+"/"+outfile+"."+format
     with open(outfile, "wb") as f:
         f.write(data)
