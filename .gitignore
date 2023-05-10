@@ -1,8 +1,9 @@
 # Poetry
 poetry.lock
 
-# Enviornments
+# Enviornment
 .env
+.venv
 
 # Mac
 .DS_Store

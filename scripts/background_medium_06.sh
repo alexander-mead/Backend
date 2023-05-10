@@ -1,16 +1,16 @@
 #!/bin/sh
 
-real=-0.7497
-imag=0.03
-zoom=8192
-iterations=512
+real=0.26605
+imag=0.004
+zoom=8000.
+iterations=350
 sigma=0.5
-transform=0.25
-width=2560
-height=1664
+transform=None
+width=1920
+height=1080
 outdir='images'
-outfile='background_small_06'
-cmap='cubehelix'
+outfile='background_medium_06'
+cmap='nipy_spectral'
 format='png'
 bound=True
 
