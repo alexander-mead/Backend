@@ -1,18 +1,18 @@
 #!/bin/sh
 
-real=-0.7497
-imag=0.03
-zoom=8192
+real=-0.4601222
+imag=0.5702860
+zoom=2100.
 iterations=512
 sigma=0.5
-transform=0.25
+transform='centralize_high'
 width=2560
 height=1664
 outdir='images'
-outfile='background_small_06'
-cmap='cubehelix'
+outfile='macbook/background_05'
+cmap='RdPu_r'
 format='png'
-bound=True
+bound=False
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\
     width=$width height=$height outdir=$outdir outfile=$outfile cmap=$cmap format=$format bound=$bound

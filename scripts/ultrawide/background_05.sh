@@ -1,16 +1,16 @@
 #!/bin/sh
 
-real=0.26
-imag=0.0017
-zoom=4000.
+real=-0.746
+imag=0.1
+zoom=500.
 iterations=256
 sigma=0.5
 transform=None
 width=3440
 height=1440
 outdir='images'
-outfile='background_large_06'
-cmap='CMRmap'
+outfile='ultrawide/background_05'
+cmap='afmhot'
 format='png'
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\

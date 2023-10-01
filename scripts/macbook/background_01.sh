@@ -9,7 +9,7 @@ transform=0.8
 width=2560
 height=1664
 outdir='images'
-outfile='background_small_01'
+outfile='macbook/background_01'
 cmap='cubehelix'
 format='png'
 

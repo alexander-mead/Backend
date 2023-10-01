@@ -1,16 +1,16 @@
 #!/bin/sh
 
-real=0.26605
-imag=0.004
-zoom=8000.
-iterations=350
+real=-0.7497
+imag=0.03
+zoom=8192
+iterations=512
 sigma=0.5
-transform=None
-width=1920
-height=1080
+transform=0.25
+width=2560
+height=1664
 outdir='images'
-outfile='background_medium_06'
-cmap='nipy_spectral'
+outfile='macbook/background_06'
+cmap='cubehelix'
 format='png'
 bound=True
 

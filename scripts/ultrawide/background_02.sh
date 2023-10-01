@@ -1,17 +1,16 @@
 #!/bin/sh
 
-real=-1.373
-imag=-0.0123
-zoom=600.
-iterations=256
+real=-0.600
+imag=-0.429
+zoom=1035
+iterations=2000
 sigma=0.5
-transform='log'
-width=2560
-height=1664
+transform='cube_root'
+width=3440
+height=1440
 outdir='images'
-outfile='background_small_04'
-cmap='twilight_shifted'
-cmap='bone'
+outfile='ultrawide/background_02'
+cmap='hot'
 format='png'
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\

@@ -1,15 +1,15 @@
 #!/bin/sh
 
-real=-0.5
-imag=0.
-zoom=1.1
+real=-0.3485
+imag=-0.6062
+zoom=3000.
 iterations=512
 sigma=0.5
-transform='cube_root'
-width=1920
-height=1080
+transform=None
+width=3440
+height=1440
 outdir='images'
-outfile='background_medium_03'
+outfile='ultrawide/background_01'
 cmap='afmhot'
 format='png'
 

@@ -1,16 +1,16 @@
 #!/bin/sh
 
-real=-0.600
-imag=-0.429
-zoom=1035
-iterations=2000
+real=-0.13
+imag=1.
+zoom=50.
+iterations=32
 sigma=0.5
-transform='cube_root'
-width=3440
-height=1440
+transform=None
+width=750
+height=1334
 outdir='images'
-outfile='background_large_02'
-cmap='hot'
+outfile='iphone/background_01'
+cmap='bone'
 format='png'
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\

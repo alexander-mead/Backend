@@ -1,16 +1,16 @@
 #!/bin/sh
 
-real=-0.12
-imag=1.
-zoom=50.
-iterations=32
+real=-1.425
+imag=0.
+zoom=30.
+iterations=256
 sigma=0.5
-transform=None
-width=1920
-height=1080
+transform='square_root'
+width=3440
+height=1440
 outdir='images'
-outfile='background_medium_01'
-cmap='bone'
+outfile='ultrawide/background_04'
+cmap='cubehelix'
 format='png'
 
 poetry run python api/image.py real=$real imag=$imag zoom=$zoom iterations=$iterations sigma=$sigma transform=$transform\
