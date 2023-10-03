@@ -1,7 +1,7 @@
 #!/bin/sh
 
-real=-0.4601222
-imag=0.5702860
+real=-0.4601
+imag=0.5703
 zoom=10000.
 iterations=256
 sigma=0.5
