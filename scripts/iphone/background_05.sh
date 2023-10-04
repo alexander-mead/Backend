@@ -1,9 +1,9 @@
 #!/bin/sh
 
-real=-0.4601
-imag=0.5703
+real=-0.46006
+imag=0.57030
 zoom=10000.
-iterations=256
+iterations=1024
 sigma=0.5
 transform='centralize_high'
 width=750
