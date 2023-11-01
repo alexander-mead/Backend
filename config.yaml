@@ -4,8 +4,8 @@ zoom: 1.
 iterations: 64
 sigma: 0.5
 transform: None
-width: 2000
-height: 2000
+width: 1000
+height: 1000
 outdir: images
 outfile: mandelbrot
 cmap: cubehelix
@@ -15,4 +15,4 @@ show: False
 smooth: True
 bound: True
 method: numba
-resample: 3
+resample: 5
