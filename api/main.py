@@ -62,7 +62,7 @@ async def image(input: ImageInput):
     width, height = input.width, input.height
     print("Creating image")
     binary_png = mandelbrot.create_image(
-        rmin, rmax, imin, imax, max_iters, width, height, sigma=0.5)
+        rmin, rmax, imin, imax, max_iters, width, height, smooth_sigma=0.5)
     # Necessary to tell that a png is being sent
     headers = {"Content-Disposition": 'inline; filename="mandelbrot.png"'}
     print("Sending image")
