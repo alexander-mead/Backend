@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from numba import njit, prange
 
 # Project imports
-from Fortran import mandelbrot
+from .Fortran import mandelbrot
 
 
 def sample_area_python(real_start: float, real_end: float, imag_start: float, imag_end: float,
